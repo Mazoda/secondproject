@@ -8,6 +8,9 @@ import 'package:secproject/providers/Dbprovider.dart';
 import 'package:secproject/views/screens/AllTasks.dart';
 import 'dart:math' as math;
 import 'package:secproject/views/screens/addTask.dart';
+import 'package:secproject/views/screens/specificScreen.dart';
+// import 'package:secproject/views/screens/specificScreen.dart';
+import 'package:secproject/views/widgets/fulltask.dart';
 import 'package:secproject/views/widgets/widget1.dart';
 import 'package:secproject/views/widgets/widget2.dart';
 import 'package:sqflite/sqflite.dart';
@@ -26,30 +29,29 @@ class MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-   
   }
 
   String name = "Oday";
-  
+
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        elevation: 0.0,actions: [
-            IconButton(
-                onPressed: () {
-                  if (context.locale.toString() == "AR") {
-                    context.setLocale(Locale("en"));
-                  } else {
-                    context.setLocale(Locale("AR"));
-                  }
-                },
-                icon: Icon(Icons.language))
-          ],
+        elevation: 0.0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                if (context.locale.toString() == "ar") {
+                  context.setLocale(Locale("en"));
+                } else {
+                  context.setLocale(Locale("ar"));
+                }
+              },
+              icon: Icon(Icons.language))
+        ],
       ),
       drawer: Drawer(
         child: Column(
@@ -71,37 +73,47 @@ class MainScreenState extends State<MainScreen> {
                   context,
                 );
               },
-              subtitle: Text("Go to home"),
-              title: Text("Home"),
+              subtitle: Text("Go to home".tr()),
+              title: Text("Home".tr()),
             ),
             ListTile(
               leading: const Icon(Icons.add_task),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {
-                Navigator.pop(
+                Navigator.push(
                   context,
+                  MaterialPageRoute(builder: (context) => AddTask()),
                 );
               },
-              subtitle: Text("Add Tasks"),
-              title: Text("New Task"),
+              subtitle: Text("Add Tasks".tr()),
+              title: Text("New Task".tr()),
             ),
             ListTile(
               leading: const Icon(Icons.task),
               trailing: Icon(Icons.arrow_forward_ios),
               onTap: () {
-                Navigator.pop(
+                Navigator.push(
                   context,
+                  MaterialPageRoute(
+                      builder: (context) => AllTasks(
+                            Tasks: tasks,
+                          )),
                 );
               },
-              subtitle: Text("Go to Tasks"),
-              title: Text("Completed Tasks"),
-            ),Spacer(),
-            Text("Version: 1.1.0",style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.bold),),SizedBox(height: 30.h,)
+              subtitle: Text("Go to Tasks".tr()),
+              title: Text("All tasks".tr()),
+            ),
+            Spacer(),
+            Text(
+              "Version".tr() + ": 1.1.0",
+              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 30.h,
+            )
           ],
         ),
       ),
-     
-     
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -114,52 +126,55 @@ class MainScreenState extends State<MainScreen> {
             child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(left: 50.w, top: 10),
-              padding: EdgeInsets.only(top: 70.h),
+              margin:(context.locale.toString() == "en")?  EdgeInsets.only(left: 50.w, top: 80.h):EdgeInsets.only(right: 20.w, top: 80.h),
+
+              // padding: EdgeInsets.only(top: 70.h),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Hey ".tr() + name,
-                        style: TextStyle(
-                            fontSize: 36.sp, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        width: 130.w,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddTask(),
-                                ));
-                          },
-                          icon: Image.asset("assets/images/add.png"))
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Today you have " "${Provider.of<DBProvider>(context).count}" " Tasks",
-                      textAlign: TextAlign.start,
+                  Container(
+                    margin:  EdgeInsets.only(right:(context.locale.toString() == "en")?10.w:10.w),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Hey ".tr() + name,
+                          style: TextStyle(
+                              fontSize: 36.sp, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          width: 130.w,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AddTask(),
+                                  ));
+                            },
+                            icon: Image.asset("assets/images/add.png"))
+                      ],
                     ),
                   ),
+                  // Align(
+                  //   alignment: Alignment.centerLeft,
+                  //   child: Text(
+                  //     "Today you have " "${Provider.of<DBProvider>(context).count}" " Tasks",
+                  //     textAlign: TextAlign.start,
+                  //   ),
+                  // ),
                   Container(
-                    margin: EdgeInsets.only(top: 30.h),
+                    margin: EdgeInsets.only(top: 30.h,right: (context.locale.toString() == "en")?0.w:20.w),
                     child: Row(
                       children: [
                         GestureDetector(
-                         onTap:() {
-                           
-                         Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AllTasks(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AllTasks(
                                           Tasks: tasks,
-                                          )));
-                                          },
+                                        )));
+                          },
                           child: Container(
                             width: 120.w,
                             decoration: BoxDecoration(
@@ -167,7 +182,8 @@ class MainScreenState extends State<MainScreen> {
                                 color: Colors.amber.withOpacity(0.5)),
                             child: Column(
                               children: [
-                                Text("16"),
+                                Text(
+                                    "${Provider.of<DBProvider>(context).count}"),
                                 SizedBox(
                                   height: 10.h,
                                 ),
@@ -187,7 +203,7 @@ class MainScreenState extends State<MainScreen> {
                                   .withOpacity(0.5)),
                           child: Column(
                             children: [
-                              Text("12"),
+                              Text("${Provider.of<DBProvider>(context).count}"),
                               SizedBox(
                                 height: 10.h,
                               ),
@@ -199,9 +215,9 @@ class MainScreenState extends State<MainScreen> {
                     ),
                   ),
                   Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       child: Container(
-                        margin: EdgeInsets.only(top: 30),
+                        margin: EdgeInsets.only(top: 30,right:(context.locale.toString() == "en")? 50.w:0.w),
                         height: 2,
                         width: 318.w,
                         color: Color.fromARGB(255, 0, 0, 0),
@@ -209,60 +225,108 @@ class MainScreenState extends State<MainScreen> {
                   SizedBox(
                     height: 30.h,
                   ),
-                  Row(
-                    children: [
-                      Wiget1("Work", 7),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      Wiget1("Personal", 2)
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Row(
-                    children: [
-                      Wiget1("Shopping", 2),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      Wiget1("Health", 2)
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: 18),
-              child: SizedBox(
-                height: 400.h,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
+                  Container(
+                    width: 400.w,
+                    // margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    margin: EdgeInsets.only(right: 20.w),
+                    child: Column(children: [
                       Row(
                         children: [
-                        
-                          widget2("Do yoga", "15 minutes")
+                          GestureDetector(
+                            onDoubleTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SpecificScreen( tasksSp: Provider.of<DBProvider>(context).specificWork
+                                          )));
+                            },
+                            child: Wiget1(
+                                "Work", Provider.of<DBProvider>(context).workC),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          GestureDetector(
+                             onDoubleTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SpecificScreen( tasksSp: Provider.of<DBProvider>(context).specificPersonal
+                                          )));
+                            },
+                            child: Wiget1(
+                              "Personal",
+                              Provider.of<DBProvider>(context).personal,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                             onDoubleTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SpecificScreen( tasksSp: Provider.of<DBProvider>(context).specificShopping
+                                          )));
+                            },
+                            child: Wiget1(
+                              "Shopping",
+                              Provider.of<DBProvider>(context).shopping,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20.w,
+                          ),
+                          GestureDetector(
+                             onDoubleTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SpecificScreen( tasksSp: Provider.of<DBProvider>(context).specificOther
+                                          )));
+                            },
+                            child: Wiget1(
+                                "Others", Provider.of<DBProvider>(context).others),
+                          )
                         ],
                       ),
                       SizedBox(
                         height: 20.h,
                       ),
-                  
-                    ],
+                    ]),
                   ),
-                ),
+                ],
               ),
-            )
-            // ListView.builder(itemBuilder:  (context, index) {
+            ),
+            Container(
+                margin: EdgeInsets.only(left: 18),
+                child: SizedBox(
+                    height: 390.h,
+                    child: ListView.builder(
+                        itemCount:
+                            Provider.of<DBProvider>(context).allTasks.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FullTask(
+                                              Provider.of<DBProvider>(context)
+                                                  .allTasks[index],
+                                            )));
+                              },
+                              child: widget2(Provider.of<DBProvider>(context)
+                                  .allTasks[index]));
+                        }))),
           ],
         )),
       ),
     );
   }
 }
-

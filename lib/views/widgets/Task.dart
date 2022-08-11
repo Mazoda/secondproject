@@ -10,6 +10,21 @@ import 'dart:math' as math;
 import 'package:secproject/models/task_model.dart';
 
 class Task extends StatelessWidget {
+  colorss(TaskModel taskModel) {
+    switch (taskModel.taskType) {
+      case "Work":
+        return Colors.blue;
+      case "Personal":
+        return Colors.teal;
+      case "Shopping":
+        return Colors.purple;
+      case "Health":
+        return Colors.red;
+      case "Others":
+        return Colors.purple.shade900;
+    }
+  }
+
   TaskModel taskmodel;
   Task(this.taskmodel);
   @override
@@ -75,7 +90,7 @@ class Task extends StatelessWidget {
                     height: 10.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(360),
-                      color: Colors.pink,
+                      color: colorss(taskmodel),
                     ))),
           ],
         ),

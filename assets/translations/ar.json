@@ -1,0 +1,26 @@
+{
+  "Add Tasks": "أضافة مهام",
+  "Add Task": "أضف مهمة",
+  "New Task": "مهمة جديدة",
+  "This field is required": "هذا الحقل مطلوب",
+  "Name": "الأسم",
+  "Choose time": "اضف الوقت",
+  "Description must be larger than 10": "يجب ان يكون هذا الحقل اكثر من 10 حروف",
+  "Description": "الوصف",
+
+  "Home": "الواجهة الرئيسية",
+  "Go to home": "الذهاب الى الواجهة الرئيسية",
+
+  "Go to Tasks": "الذهاب الى المهام",
+  "All tasks": "جميع المهام",
+  "Version": "الاصدار",
+  "Hey ": "مرحبا ",
+  "Tasks Created": "جميع المهام",
+  "Tasks Left": "المهام المتبقية",
+  "Work": "العمل",
+  "Personal": "شخصي",
+  "Shopping": "شراء",
+  "Others": "أخرى",
+  " Tasks": " المهام",
+  "Update Task":"تحديث"
+}

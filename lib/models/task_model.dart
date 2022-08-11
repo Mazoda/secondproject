@@ -1,12 +1,12 @@
 import 'package:secproject/data/DbHelper.dart';
 class TaskModel {
-
+  
   int? id;
   String? taskType;
   String? Name;
   bool? isComplete;
   String? description;
-  DateTime? date;
+  String? date;
   TaskModel({
     this.taskType,
     required this.Name,
@@ -20,6 +20,9 @@ class TaskModel {
     isComplete = json[DbHelper.taskIsComplete] == 1 ? true : false;
     description=json[DbHelper.taskDes];
     taskType=json[DbHelper.taskType];
+    date= json[DbHelper.taskdate];
+
+   
   }
 
   copy(int id) {
@@ -28,12 +31,15 @@ class TaskModel {
 
   Map<String, dynamic> toMap() {
     return  {
+      DbHelper.taskType:taskType,
       DbHelper.taskName: Name,
       DbHelper.taskIsComplete: isComplete! ? 1 : 0,
       DbHelper.taskDes:description,
-      DbHelper.taskdate:"${date!.hour} : ${date!.minute}"
+      DbHelper.taskdate:date,
     };
   }
 
-  void ChangeIsComplete() {}
+  void ChangeIsComplete() {
+       this.isComplete = !this.isComplete!;
+  }
 }

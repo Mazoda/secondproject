@@ -1,24 +1,30 @@
-import 'dart:developer';
-import 'dart:ffi';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:secproject/data/DbHelper.dart';
 import 'package:secproject/models/task_model.dart';
 import 'package:secproject/providers/Dbprovider.dart';
 
-class AddTask extends StatefulWidget {
+class FullTask extends StatefulWidget {
+  TaskModel taskModel;
+  FullTask(this.taskModel);
+
   @override
-  State<StatefulWidget> createState() {
-    return AddTaskState();
-  }
+  State<FullTask> createState() => FullTaskState();
 }
 
-class AddTaskState extends State<AddTask> {
-  TimeOfDay selectedTime = TimeOfDay.now();
+class FullTaskState extends State<FullTask> {
+  // String? name = "";
+  // var description;
+  // void initState() {
+  //   name = widget.taskModel.Name;
+  //   description = widget.taskModel.description;
+  // }
+  String? name;
+  String? description;
 
+
+  TimeOfDay selectedTime = TimeOfDay.now();
   GlobalKey<FormState> registerKey = GlobalKey();
   TextEditingController taskNameController = TextEditingController();
   TextEditingController taskDate = TextEditingController();
@@ -32,13 +38,16 @@ class AddTaskState extends State<AddTask> {
     'Others',
   ];
   String? selectedItem;
-  @override
   void initState() {
     super.initState();
-    selectedItem = itemsDropDown[0];
-    setState(() {});
-  }
+    name = widget.taskModel.Name;
+    taskNameController.text=name!;
 
+
+    description = widget.taskModel.description;
+    taskDescription.text=description!;
+    
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,6 +82,7 @@ class AddTaskState extends State<AddTask> {
                   child: Column(
                     children: [
                       TextFormField(
+                        // initialValue: widget.taskModel.Name,
                         keyboardType: TextInputType.text,
                         controller: taskNameController,
                         validator: (value) {
@@ -93,9 +103,9 @@ class AddTaskState extends State<AddTask> {
                             selectedTime = (await showTimePicker(
                               context: context,
                               initialTime: selectedTime,
-                              
                             ))!;
-                            Provider.of<DBProvider>(context, listen: false).selectTime(selectedTime);
+                            Provider.of<DBProvider>(context, listen: false)
+                                .selectTime(selectedTime);
                             // date =
                             //   await  Provider.of<DBProvider>(context, listen: false)
                             //         .selectTime(context);
@@ -140,40 +150,43 @@ class AddTaskState extends State<AddTask> {
                         height: 40,
                       ),
                       TextFormField(
+                        // initialValue: widget.taskModel.description,
                         keyboardType: TextInputType.text,
                         controller: taskDescription,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "This field is required".tr();
                           } else if (value.length <= 10) {
-                            return "Description must be larger than 10".tr();
+                            return " description must be larger than 10".tr();
                           }
                         },
                         decoration: InputDecoration(
                             suffixIcon: Icon(Icons.description_outlined),
                             hintText: "Description".tr(),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15))),maxLines: 10,
+                                borderRadius: BorderRadius.circular(15))),
                       ),
                       SizedBox(
-                        height: 150.h,
+                        height: 300.h,
                       ),
-                      ElevatedButton(style:ElevatedButton.styleFrom(primary: Colors.deepPurple) ,
+                      ElevatedButton(
                           onPressed: () async {
                             if (registerKey.currentState!.validate()) {
+                              TaskModel updatedTask = TaskModel(
+                                  Name: taskNameController.text,
+                                  description: taskDescription.text,
+                                  taskType: selectedItem,
+                                  date:
+                                      "${selectedTime.hour}:${selectedTime.minute}");
+                              updatedTask.copy(widget.taskModel.id!);
                               await Provider.of<DBProvider>(context,
                                       listen: false)
-                                  .insertOneTask(TaskModel(
-                                      Name: taskNameController.text,
-                                      description: taskDescription.text,
-                                      taskType: selectedItem,
-                                      date:
-                                          "${selectedTime.hour}:${selectedTime.minute}"));
+                                  .updateTask(updatedTask);
 
                               Navigator.pop(context);
                             }
                           },
-                          child: Text("Add Task".tr())),
+                          child: Text("Update Task".tr())),
                     ],
                   ),
                 ),

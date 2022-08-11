@@ -8,19 +8,20 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 void main() async {
- WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  
   await DbHelper.dbHelper.initDataBase();
-  // await EasyLocalization.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   // await SpHelper.initS();
-ScreenUtil.ensureScreenSize();
-  runApp(const MyApp());
-  //   EasyLocalization(
-  //       supportedLocales:const [Locale('en'), Locale("ar")],
-  //       path:
-  //           'assets/translations', // <-- change the path of the translation files
-  //       fallbackLocale:const Locale('en'),
-  //       child:const),
-  // );
+  ScreenUtil.ensureScreenSize();
+  runApp(
+    EasyLocalization(
+        supportedLocales: [Locale('en'), Locale('ar')],
+        path:
+            'assets/translations', // <-- change the path of the translation files
+        fallbackLocale: Locale('en'),
+        child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,18 +35,17 @@ class MyApp extends StatelessWidget {
         return DBProvider();
       },
       child: ScreenUtilInit(
-        designSize: const Size(411.4,  891.42),
-        minTextAdapt: true,
-        builder: (context , child) {
-         return const MaterialApp(
-          debugShowCheckedModeBanner: false,
-        // localizationsDelegates: context.localizationDelegates,
-        // supportedLocales: context.supportedLocales,
-        // locale: context.locale,
-        home: MainScreen(),
-      );
-      }
-    
-    ),
+          designSize: const Size(411.4, 891.42),
+          minTextAdapt: true,
+          builder: (context, child) {
+            return  MaterialApp(
+              debugShowCheckedModeBanner: false,
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              home: MainScreen(),
+            );
+          }),
     );
-}}
+  }
+}

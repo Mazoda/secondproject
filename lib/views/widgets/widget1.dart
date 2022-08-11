@@ -58,7 +58,7 @@ class Wiget1 extends StatelessWidget {
               margin: EdgeInsets.only(left: 20.w, top: 10.h),
               child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("$num Tasks".tr(),
+                  child: Text("$num"+" Tasks".tr(),
                       style: TextStyle(fontSize: 18.sp))),
             ),
           ],

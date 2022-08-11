@@ -1,0 +1,27 @@
+{
+    "This field is required":"This field is required",
+    "Name":"Name",
+    "Choose time":"Choose time",
+    "Description must be larger than 10":"Description must be larger than 10",
+    "Description":"Description",
+    "Add Task":"Add Task",
+    "Home":"Home",
+    "Go to home":"Go to home",
+    "Add Tasks":"Add Tasks",
+    "New Task":"New Task",
+    "Go to Tasks":"Go to Tasks",
+    "All tasks":"All tasks",
+    "Version":"Version",
+    "Hey ":"Hey ",
+    "Tasks Created":"Tasks Created",
+    "Tasks Left":"Tasks Left",
+    "Work": "Work",
+    "Personal":"Personal",
+    "Shopping":"Shopping",
+    "Others":"Others",
+    " Tasks":" Tasks",
+    "Update Task":"Update Task",
+    "Delete":"Delete"
+
+
+}

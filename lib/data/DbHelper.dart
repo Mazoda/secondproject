@@ -12,7 +12,6 @@ class DbHelper {
   static const String typeTitle = "type_Title";
   static const String typeId = "type_Id";
 
-  static const String databaseName = "tasks";
   static const String tabelName = "tasks";
   static const String taskId = "task_id";
   static const String taskName = 'task_name';
@@ -27,42 +26,27 @@ class DbHelper {
 
   Future<Database?> ceateDataBaseConnection() async {
     String databasepath = await getDatabasesPath();
-    String databaseName = "tasks.db";
+    String databaseName = "tasks11.db";
     String fullpath = join(databasepath, databaseName);
     database = await openDatabase(
       fullpath,
       version: 1,
-      onCreate: (db, version) {
-        db.execute('''
-CREATE TABLE $tabelName2 (
-  $typeId INTEGER PRIMARY KEY AUTOINCREMENT,
-  $typeTitle Text,
-
-  )
-''');
-        db.execute('''
+      onCreate: (db, version) async {
+        await db.execute('''
 
 CREATE TABLE $tabelName (
   $taskId INTEGER PRIMARY KEY AUTOINCREMENT,
   $taskName TEXT,
-  $typeId INTEGER,
   $taskDes TEXT,
-  $taskdate DATE,
+  $taskdate STRING,
   $taskIsComplete INTEGER,
-   FOREIGN KEY ($typeId) REFERENCES $tabelName2($typeId)
+  $taskType TEXT
   )
 
 ''');
-        db.execute('''
- $taskId INTEGER PRIMARY KEY AUTOINCREMENT,
- $typeId INTEGER PRIMARY KEY AUTOINCREMENT,
-  FOREIGN KEY ($taskId) REFERENCES $tabelName($taskId)
-   FOREIGN KEY ($typeId) REFERENCES $tabelName2($typeId)
-''');
       },
       onOpen: (db) async {
-        final tables =
-            await db.rawQuery("Select name from sqlite_master order by name;");
+        _onOpen(db);
       },
     );
     return database;
@@ -79,7 +63,24 @@ CREATE TABLE $tabelName (
 
   Future<List<TaskModel>> selectAllTask() async {
     List allTasks = await database!.query(tabelName);
-    print("asdfasdfasdfsadfasdf $allTasks");
+    return allTasks.map((e) {
+      return TaskModel.fromMap(e);
+    }).toList();
+  }
+
+  Future<List<TaskModel>> selectOneTask() async {
+    List allTasks = await database!
+        .query(tabelName, where: "$taskId=?", whereArgs: ["$taskId"]);
+        print(allTasks);
+    return allTasks.map((e) {
+      return TaskModel.fromMap(e);
+    }).toList();
+
+  }
+
+  Future<List<TaskModel>> speceficType(String name) async {
+    List allTasks = await database!
+        .query(tabelName, where: "$taskType=?", whereArgs: [name]);
     return allTasks.map((e) {
       return TaskModel.fromMap(e);
     }).toList();
@@ -103,20 +104,55 @@ CREATE TABLE $tabelName (
     }).toList();
   }
 
-  // ignore: non_constant_identifier_names
-  UpdateComplete(TaskModel taskModel) async {
-    int count = await database!.update(tabelName, taskModel.toMap(),
+
+  updateTask(TaskModel taskModel) async {
+    print("id======"+taskModel.id.toString());
+    int x= await database!.update(tabelName, taskModel.toMap(),
         where: "$taskId=?", whereArgs: [taskModel.id]);
-    print(count);
+        print("================="+x.toString());
   }
 
-   getAllCount() async {
-    
-    var x = await database!.rawQuery('SELECT COUNT (*)as count from $tabelName ');  print(x[0]["count"]);
-  return x[0]["count"];
+  getAllCount() async {
+    var x =
+        await database!.rawQuery('SELECT COUNT (*)as count from $tabelName ');
+    return x[0]["count"];
+  }
 
+  getleftCount() async {
+    var x = await database!.rawQuery(
+        'SELECT COUNT (*)as count from $tabelName where $taskIsComplete=1 ');
+    return x[0]["count"];
+  }
 
-   
+  getWorkCount() async {
+    var x = await database!.rawQuery(
+        'SELECT COUNT (*)as count from $tabelName where $taskType="Work" ');
+    return x[0]["count"];
+  }
+
+  getPersonalCount() async {
+    var x = await database!.rawQuery(
+        'SELECT COUNT (*)as count from $tabelName where $taskType="Personal" ');
+    print(x[0]["count"]);
+    return x[0]["count"];
+  }
+
+  getShopCount() async {
+    var x = await database!.rawQuery(
+        'SELECT COUNT (*)as count from $tabelName where $taskType="Shopping" ');
+    return x[0]["count"];
+  }
+
+  getSportsCount() async {
+    var x = await database!.rawQuery(
+        'SELECT COUNT (*)as count from $tabelName where $taskType="Sports" ');
+    return x[0]["count"];
+  }
+
+  getOtherCount() async {
+    var x = await database!.rawQuery(
+        'SELECT COUNT (*)as count from $tabelName where $taskType="Others" ');
+    return x[0]["count"];
   }
 
   Future<int?> getincompleteCount() async {
@@ -136,5 +172,38 @@ CREATE TABLE $tabelName (
   deleteTask(int id) async {
     await database!.delete(tabelName, where: "$taskId=?", whereArgs: [id]);
     selectAllTask();
+  }
+  getWorkTasks() async{
+     List allTasks =
+        await database!.query(tabelName, where: '$taskType=?',whereArgs: ['Work']);
+  print("========================-=-="+allTasks.toString());
+    return allTasks.map((e) {
+      return TaskModel.fromMap(e);
+    }).toList();
+  }
+    getPersonalTasks() async{
+     List allTasks =
+        await database!.query(tabelName, where: '$taskType=?',whereArgs: ['Personal']);
+
+    return allTasks.map((e) {
+      return TaskModel.fromMap(e);
+    }).toList();
+  }
+
+    getShoppingTasks() async{
+     List allTasks =
+        await database!.query(tabelName, where: '$taskType=?',whereArgs: ['Shopping']);
+
+    return allTasks.map((e) {
+      return TaskModel.fromMap(e);
+    }).toList();
+  }
+  getOthersTasks() async{
+     List allTasks =
+        await database!.query(tabelName, where: '$taskType=?',whereArgs: ['Others']);
+
+    return allTasks.map((e) {
+      return TaskModel.fromMap(e);
+    }).toList();
   }
 }
